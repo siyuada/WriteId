@@ -228,7 +228,7 @@
  
 ## 2019.5.29-Rui
  
-1. 双向LSTM模型和1间隔RHS用于Task10
+1. 双向LSTM模型和4间隔RHS用于Task10
    - Task10: 60epochs
     - 特征:4间隔RHS
     - 每个人样本的序列长度：100，模型保存名rnn_5.pkl
