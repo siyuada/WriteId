@@ -236,3 +236,12 @@
     - Train10 Loss: 0.094468, Train10 Acc: 0.968500, Eval Loss: 0.552045, Eval Acc: 0.879167
     - 测试: 5次测试，1次90%，4次100%。90%是8分成5。
     - 结论: 4间隔RHS...
+    
+2. 在LSTM输出加softmax，取100RHS求概率和进行判断
+  对**2019.5.28-Rui**生成的模型进行测试，结果是测试结果一直是90%的模型，还是90%，但是**之前在这两者之间摇摆的模型稳定为100%** ，因此这样改变还是有效果的。
+ ‘’‘
+ import torch.nn.functional as F
+ out_softmax = F.softmax(out)
+ out_softmax_sum = out_softmax.sum(0)
+ _, pred = out_softmax_sum.max(0)
+ ’‘’
