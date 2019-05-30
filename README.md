@@ -245,3 +245,14 @@
     out_softmax_sum = out_softmax.sum(0)
     _, pred = out_softmax_sum.max(0)
     ```
+## 2019.5.30-Rui
+ 
+1. 0、2、4间隔RHS混合训练
+   - Task10: 70epochs
+    - 特征:1、3、5RHS
+    - 每个人样本的序列长度：100，模型保存名rnn_1_3_5.pkl
+    - 3层双向，隐藏层=400，batch_size=1000，训练样本数1000，测试600，Adam学习率0.001，权重衰减0.0001
+    - Train10 Loss: 0.011944, Train10 Acc: 0.997700, Eval Loss: 0.713745, Eval Acc: 0.848500
+    - 测试: 还没测
+    - 结论: 
+
