@@ -312,6 +312,41 @@ Softmax 预测, 概率：  8 [0.0005, 0.0105, 3.4464, 0.0005, 0.0191, 4.7295, 0.
 从概率上看更加合适
   ```
 
-- 107分类，135 Dropout0.5，模型名称：107rnn3_bidrop135.pkl
-- 
-- 测试：
+## 2019.6.1
+  - 对新的RHS数据进行训练
+  - 单独各长度实验，10,30,50,80,100
+  - 混合长度实验
+  - 已完成对LSTM对变长序列的处理
+  - 已完成数据样本的索引生成
+  - 10分类：双向两层LSTM，学习率30ecpo x 0.1，初始0.001，正则化参数0.0005
+  - 参数初始化有问题，加上之后不收敛？
+  - 具体：10分类
+    - 100长度：名称：save/10rnn2-bi-new100.pkl
+      `epoch: 30, Train10 Loss: 0.176822, Train10 Acc: 0.937900, Eval Loss: 0.292234, Eval Acc: 0.896200  -0.001学习率`
+     ` epoch: 50, Train10 Loss: 0.091720, Train10 Acc: 0.975000, Eval Loss: 0.203464, Eval Acc: 0.930500  -0.0001学习率`
+    - 10长度：名称：save/10rnn2-bi-new10.pkl 无dropout 双层双向
+      `epoch: 50, Train10 Loss: 0.902014, Train10 Acc: 0.683100, Eval Loss: 1.191628, Eval Acc: 0.577000`
+    - 30长度：名称：save/10rnn2-bi-new30.pkl 无dropout 单层双向，效果不好，有过拟合
+      `epoch: 50, Train10 Loss: 0.744200, Train10 Acc: 0.738500, Eval Loss: 1.165802, Eval Acc: 0.589100`
+      双层双向：
+      `epoch: 50, Train10 Loss: 0.205758, Train10 Acc: 0.934400, Eval Loss: 0.571831, Eval Acc: 0.807400`
+    - 50长度：双层双向 过拟合
+      `epoch: 50, Train10 Loss: 0.143937, Train10 Acc: 0.953800, Eval Loss: 0.382054, Eval Acc: 0.869000`
+      加入Dropout：
+      `epoch: 50, Train10 Loss: 0.052370, Train10 Acc: 0.987000, Eval Loss: 0.361123, Eval Acc: 0.890900`
+    - 80长度：
+      `epoch: 50, Train10 Loss: 0.130974, Train10 Acc: 0.961400, Eval Loss: 0.304671, Eval Acc: 0.897400`
+      加入Dropout
+      `epoch: 50, Train10 Loss: 0.101151, Train10 Acc: 0.971400, Eval Loss: 0.256305, Eval Acc: 0.915100`
+    - 结论，均有过拟合发生，考虑加入dropout，但似乎100长度的效果是最好的
+      
+    - 混合训练 50 80 100 在100的基础上 dropout=0.5   10rnn2-bi-new5080100.pkl
+    `epoch: 50, Train10 Loss: 0.013527, Train10 Acc: 0.997133, Eval Loss: 0.149151, Eval Acc: 0.956967`
+      30 80 10 也在100RHS的基础上
+    `epoch: 50, Train10 Loss: 0.064725, Train10 Acc: 0.982700, Eval Loss: 0.348810, Eval Acc: 0.891700`
+    
+  - 107分类
+      
+    
+    
+  
