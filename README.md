@@ -347,6 +347,7 @@ Softmax 预测, 概率：  8 [0.0005, 0.0105, 3.4464, 0.0005, 0.0191, 4.7295, 0.
     
   - 107分类
     - 100RHS
+    `epoch: 50, Train10 Loss: 0.019877, Train10 Acc: 0.997296, Eval Loss: 0.264691, Eval Acc: 0.925102`
     - 50RHS 
     `epoch: 50, Train10 Loss: 0.051595, Train10 Acc: 0.990034, Eval Loss: 0.478447, Eval Acc: 0.866919`
     训练太慢了，于是只打算训混合的和两个单独的
