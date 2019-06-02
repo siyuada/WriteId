@@ -354,6 +354,16 @@ Softmax 预测, 概率：  8 [0.0005, 0.0105, 3.4464, 0.0005, 0.0191, 4.7295, 0.
     - 5080100
     `Train10 Loss: 0.029824, Train10 Acc: 0.992840, Eval Loss: 0.236009, Eval Acc: 0.936400`
       
-    
+## 2019.6.2-Rui
+ 
+1. 调研了attention
+   
+2. Attention用于书写着识别
+   - Task10: 70epochs
+    - 特征:相邻点RHS
+    - 每个人样本的序列长度：100，模型保存名rnn_1_attention.pkl
+    - 3层双向，隐藏层=400，batch_size=1000，训练样本数1000，测试600，Adam学习率0.001，权重衰减0.0001, attentino层一个隐含层24个节点。
+    - epoch: 70, Train10 Loss: 0.056789, Train10 Acc: 0.983500, Eval Loss: 0.524559, Eval Acc: 0.867500
+   
     
   
