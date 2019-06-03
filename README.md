@@ -365,5 +365,16 @@ Softmax 预测, 概率：  8 [0.0005, 0.0105, 3.4464, 0.0005, 0.0191, 4.7295, 0.
     - 3层双向，隐藏层=400，batch_size=1000，训练样本数1000，测试600，Adam学习率0.001，权重衰减0.0001, attentino层一个隐含层24个节点。
     - epoch: 70, Train10 Loss: 0.056789, Train10 Acc: 0.983500, Eval Loss: 0.524559, Eval Acc: 0.867500
    
-    
+## 2019.6.3-Rui
+
+1. Attention用于书写着识别
+   - Task10: 60epochs
+    - 特征:5RHS
+    - 每个人样本的序列长度：100，模型保存名encoder_5_attention.pkl、classfiter_5_attention.pkl
+    - 3层双向，隐藏层=400，batch_size=1000，训练样本数1000，测试600，Adam学习率0.001，权重衰减0.0001, attentino层一个隐含层64个节点。
+    - epoch: 60, Train10 Loss: 0.017537, Train10 Acc: 0.995100, Eval Loss: 0.483785, Eval Acc: 0.881000
+    - 特点: 正确率上升非常快，epoch: 21, Train10 Loss: 0.123209, Train10 Acc: 0.959400, Eval Loss: 0.309864, Eval Acc: 0.895333
+    但是之后只有训练正确率上升，测试正确率波动，可能已经学不到什么东西了。
+    - 结论：加入attention机制正确率没有显著提高的可能原因。关于LSTM的attention机制，比较流行的是针对seq2seq(encoder-decoder框架)任务，不同的decoder输出可以采用不同的encoder输出权重，使得不同的decoder输出#聚焦#于不同的部分。但是书写者识别任务是many2one任务的，因此我们要学习的只有针对one的many权重，但是回顾我们的特征，其实诸如100RHS之间是没有明确的顺序关系的，因为每个特征都是随机挑选出来的，因此可能前面学习了权重，但是由于特征提取的随机性，也难以正确聚焦。
+
   
