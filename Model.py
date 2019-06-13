@@ -57,8 +57,8 @@ def load_model(num_class):
     input_size = 3  # 输入数据的特征维度
     hidden_size = 400  # 隐藏层的size
     if num_class == 10:
-        num_layers = 3  # 有多少层
-        attn_num = 128
+        num_layers = 2  # 有多少层
+        attn_num = 64
         encoder_dir = './encoder_10_attention_400.pkl'
         rnn = RNN(input_size, hidden_size, num_layers, num_class).cuda()
         rnn.load_state_dict(torch.load(encoder_dir))
