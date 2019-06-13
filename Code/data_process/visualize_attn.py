@@ -27,11 +27,11 @@ def get_color():
 
 color = get_color()
 
-file = 'Data10\Validation_with_labels/002.npy'
+file = 'Data10\Validation_with_labels/005.npy'
 data = np.load(file)
 file_lst = re.split(r'[/\\]\s*', file)
 
-attn_path = 'RHS_for_attention\Validation_with_labels/002/RHS_len=50'
+attn_path = 'RHS_for_attention\Validation_with_labels/005/RHS_len=50'
 index = np.load(attn_path + '/index.npy')
 
 # calculate the cumulative sum of points for each character
@@ -79,10 +79,16 @@ for character in data:
     count = count + 1
 
 # plot RHS
-thres = 0.02
+thres = 0.00045
 for i in range(RHS_num):
     attn_file = attn_path + '/attn_' + str(i).zfill(6) + '.npy'
     attn = np.load(attn_file)
+
+    temp = [attn[0],]
+    for j in range(len(attn) - 1):
+        temp.append(attn[j + 1] - attn[j])
+    temp = np.array(temp)
+    attn = temp
 
     p = len(np.where(attn >= thres)[0])/100
     print('max = %.4f, min = %.4f, thres = %.4f, p = %.2f'%(max(attn), min(attn), thres, p))
