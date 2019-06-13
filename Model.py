@@ -59,19 +59,19 @@ def load_model(num_class):
     if num_class == 10:
         num_layers = 3  # 有多少层
         attn_num = 128
-        encoder_dir = '/data/data_98HKWr05Uo7j/upload/encoder_107_attention.pkl'
+        encoder_dir = './encoder_10_attention_400.pkl'
         rnn = RNN(input_size, hidden_size, num_layers, num_class).cuda()
         rnn.load_state_dict(torch.load(encoder_dir))
-        atten_dir = '/data/data_98HKWr05Uo7j/upload/classifier_107_attention.pkl'
+        atten_dir = './classifier_10_attention_400.pkl'
         classifier = AttnClassifier(hidden_size * 2, num_class, attn_num).cuda()
         classifier.load_state_dict(torch.load(atten_dir))
     elif num_class == 107:
         num_layers = 3  # 有多少层
         attn_num = 128
-        encoder_dir = '/data/data_98HKWr05Uo7j/upload/encoder_107_attention.pkl'
+        encoder_dir = './encoder_107_attention.pkl'
         rnn = RNN(input_size, hidden_size, num_layers, num_class).cuda()
         rnn.load_state_dict(torch.load(encoder_dir))
-        atten_dir = '/data/data_98HKWr05Uo7j/upload/classifier_107_attention.pkl'
+        atten_dir = './classifier_107_attention.pkl'
         classifier = AttnClassifier(hidden_size * 2, num_class, attn_num).cuda()
         classifier.load_state_dict(torch.load(atten_dir))
 
