@@ -28,15 +28,15 @@ class RNN(nn.Module):
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, dropout=0.5, batch_first=True, bidirectional=True)
 
     def forward(self, x):
-        # 设置初始状态h_0与c_0的状态是初始的状态，一般设置为0，尺寸是,x.size(0)
+        # 璁剧疆鍒濆鐘舵€乭_0涓巆_0鐨勭姸鎬佹槸鍒濆鐨勭姸鎬侊紝涓€鑸缃负0锛屽昂瀵告槸,x.size(0)
         h0 = (5 * torch.ones(self.num_layers * 2, x.size(0), self.hidden_size)).cuda()
         c0 = (torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size)).cuda()
 
         # Forward propagate RNN
-        out, (h_n, c_n) = self.lstm(x, (h0, c0))  # 送入一个初始的x值，作为输入以及(h0, c0)
+        out, (h_n, c_n) = self.lstm(x, (h0, c0))  # 閫佸叆涓€涓垵濮嬬殑x鍊硷紝浣滀负杈撳叆浠ュ強(h0, c0)
 
         # Decode hidden state of last time step
-        # out = self.fc(out[:, -1, :])  # output也是batch_first, 实际上h_n与c_n并不是batch_first
+        # out = self.fc(out[:, -1, :])  # output涔熸槸batch_first, 瀹為檯涓奾_n涓巆_n骞朵笉鏄痓atch_first
         return out
 
 class AttnClassifier(nn.Module):
@@ -52,12 +52,38 @@ class AttnClassifier(nn.Module):
         return self.main(feats), attns
 
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+global count
+count = 0
+global rnn, classifier
+
+def predict(data, true_ids, class_num):
+    global count
+    global rnn
+    global classifier
+    if count == 0:
+        rnn, classifier = load_model(class_num)
+        count += 1
+    test_data = data_process(data, 20)
+    rnn.eval()
+    with torch.no_grad():
+        test_data = torch.FloatTensor(test_data).to(device)
+        encoder_outputs = rnn(test_data)
+        out, attn = classifier(encoder_outputs)
+        out_softmax = F.softmax(out, dim=1)
+        out_softmax_sum = out_softmax.sum(0)
+        t = [round(out_softmax_sum.cpu().numpy()[i], 4) for i in range(class_num)]
+
+        id = t.index(max(t))
+        return true_ids[id]
+
 def load_model(num_class):
     couple_length = 20
-    input_size = 3  # 输入数据的特征维度
-    hidden_size = 400  # 隐藏层的size
+    input_size = 3  # 杈撳叆鏁版嵁鐨勭壒寰佺淮搴?
+    hidden_size = 400  # 闅愯棌灞傜殑size
     if num_class == 10:
-        num_layers = 2  # 有多少层
+        num_layers = 2  # 鏈夊灏戝眰
         attn_num = 64
         encoder_dir = './encoder_10_attention_400.pkl'
         rnn = RNN(input_size, hidden_size, num_layers, num_class).cuda()
@@ -66,7 +92,7 @@ def load_model(num_class):
         classifier = AttnClassifier(hidden_size * 2, num_class, attn_num).cuda()
         classifier.load_state_dict(torch.load(atten_dir))
     elif num_class == 107:
-        num_layers = 3  # 有多少层
+        num_layers = 3  # 鏈夊灏戝眰
         attn_num = 128
         encoder_dir = './encoder_107_attention.pkl'
         rnn = RNN(input_size, hidden_size, num_layers, num_class).cuda()
@@ -78,7 +104,7 @@ def load_model(num_class):
     else:
         print('Please choose 10/107 classify Task')
         sys.exit(0)
-    return rnn, classifier, couple_length
+    return rnn, classifier
 
 
 
@@ -103,4 +129,3 @@ def data_process(data, couple_length):
         index_all.append(index)
         test_data.append(delta_S[index: index + seq_length[i]])
     return np.array(test_data)
-
